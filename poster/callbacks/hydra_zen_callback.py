@@ -9,7 +9,7 @@ log = logging.getLogger(__name__)
 
 class HydraZenCallback(Callback):
     """
-    relies on the user setting up the store beforehand!
+    relies on the user setting up the store(s) beforehand!
     """
 
     def __init__(self, task_fn: Callable, store: ZenStore, job_type: str, hydra_version_base: str = "1.3"):

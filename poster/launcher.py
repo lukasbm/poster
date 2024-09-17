@@ -6,7 +6,7 @@ from .callbacks import Callback
 # TODO: how to pass the context to the callbacks?
 
 class Launcher:
-    def __init__(self, callbacks: List[Callback], execute_final_callbacks_in_reverse: bool):
+    def __init__(self, callbacks: List[Callback], execute_final_callbacks_in_reverse: bool = False):
         """
         :param callbacks: The order of callbacks matters
         :param execute_final_callbacks_in_reverse:
@@ -18,11 +18,11 @@ class Launcher:
 
     def start(self):
         for callback in self.callbacks:
-            callback.before_job_start(self.context)
+            callback.before_job_start()#self.context)
         for callback in self.callbacks:
-            callback.before_run_start(self.context)
+            callback.before_run_start()#self.context)
         for callback in self.callbacks:
-            callback.on_run_start(self.context)
+            callback.on_run_start()#self.context)
 
     def end(self):
         for callback in self.callbacks:

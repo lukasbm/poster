@@ -1,13 +1,17 @@
-from hydra import initialize, compose
-from omegaconf import OmegaConf
+from .callback import Callback
 
-class HydraConfigCallback:
+
+class HydraCallback(Callback):
     def __init__(self, config_name='config', config_path=None, overrides=None):
         self.config_name = config_name
         self.config_path = config_path
         self.overrides = overrides or []
 
-    def __call__(self, context):
+    def before_run_start(self):
+        # lazy imports to speed up the import process
+        from hydra import initialize, compose
+        from omegaconf import OmegaConf
+
         # Initialize Hydra and compose the configuration
         with initialize(config_path=self.config_path, version_base=None):
             cfg = compose(config_name=self.config_name, overrides=self.overrides)
