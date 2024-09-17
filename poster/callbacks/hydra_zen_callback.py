@@ -1,8 +1,9 @@
+import logging
 from typing import Callable
 
-from .callback import Callback
 from hydra_zen import ZenStore
-import logging
+
+from .callback import Callback
 
 log = logging.getLogger(__name__)
 
@@ -22,6 +23,13 @@ class HydraZenCallback(Callback):
         log.info("HydraZenCallback: before_run_start")
 
         from hydra_zen import zen
+
+        # TODO add some default settings
+        # https://github.com/facebookresearch/hydra/issues/324
+        # https://github.com/facebookresearch/hydra/issues/910
+        # https://stackoverflow.com/questions/65104134/disable-file-output-of-hydra
+        # hydra/job_logging = "disabled"  # disable logging
+        # hydra.output_subdir = "null"  # disable output subdir
 
         self.store.add_to_hydra_store(overwrite_ok=True)
         # exposes the cli

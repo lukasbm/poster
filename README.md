@@ -1,8 +1,11 @@
 # Poster
 
+## Concept
+
 ## Features
 
 - run, rerun and continue experiments
+- TODO: hparam search and sweeping! (also utilize job array in submitit then)
 
 ## CLI
 
