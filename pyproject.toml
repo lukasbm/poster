@@ -11,6 +11,7 @@ python-fire = "^0.1.0"
 wandb = "^0.18.1"
 submitit = "^1.5.1"
 hydra-submitit-launcher = "^1.2.0"
+hydra-zen = "^0.13.0"
 
 
 [build-system]
