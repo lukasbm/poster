@@ -9,7 +9,7 @@ log = logging.getLogger(__name__)
 class SubmititCallback(Callback):
     _EXECUTOR = "abstract"
 
-    def __init__(self, task_fn: Callable, task_params: Dict, conf):
+    def __init__(self, task_fn: Callable, task_params: Dict, submitit_conf: Dict):
         self.conf = conf
         self.task_fn = task_fn
         self.task_params = task_params

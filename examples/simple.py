@@ -28,3 +28,4 @@ if __name__ == "__main__":
         HydraZenCallback(task_fn=main_fn, store=store, job_type="simple"),
     ])
     launcher.start()
+    # TODO: where is this called launcher.end()
