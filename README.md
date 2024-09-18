@@ -23,19 +23,20 @@ TODO
 
 Callbacks can server all sorts of purposes. They can be used to save the model, log metrics, etc.
 
-- [X] Hydra Zen (argument parsing)
-- [ ] Hydra (argument parsing)
-- [ ] Aim (Experiment Tracker)
-- [ ] Python Fire (argument parsing)
-- [ ] Local Directory (data storage)
-- [ ] S3 (data storage)
-- [ ] Weights & Biases (Experiment Tracker)
-- [ ] SCP (data storage)
-- [ ] Submitit (Job submission)
-- [ ] Logging (logging)
-- [ ] Telegram (notification)
-- [ ] Email (notification)
-- [ ] HardwareInfo (monitoring)
+- [X] Hydra Zen (argument parsing) Parse arguments using Hydra
+- [ ] Hydra (argument parsing) Parse arguments using Hydra
+- [ ] Aim (Experiment Tracker) Log metrics and hyperparameters
+- [ ] Python Fire (argument parsing) Parse arguments using Python Fire
+- [ ] Local Directory (data storage) Save files to a local directory
+- [ ] S3 (data storage) Save files to S3
+- [ ] Weights & Biases (Experiment Tracker) Log metrics and hyperparameters
+- [ ] SCP (data storage) Securely copy files to a remote server
+- [ ] Submitit (Job submission) Submits the job to a cluster
+- [ ] Logging (logging) Logs the output of the experiment
+- [ ] Telegram (notification) Sends a message to a telegram bot when the experiment is done
+- [ ] Email (notification) Sends an email when the experiment is done
+- [ ] HardwareInfo (monitoring) Monitors your GPU usage
+- [ ] Git (version control) Can check out a specific commit, branch, etc. before running
 
 ## Extra functions
 
@@ -69,3 +70,9 @@ TODO: how to deal with forking, e.g. when they run on different nodes, e.g. when
 
 TODO: auto invoke end function on program end! (e.g. even when sigterm or similar is received)
 
+TODO: need to create a poster.json file to be able to rerun the experiment.
+
+TODO: should argument parsing, e.g. with hydra, be done in the script or in the poster?
+
+TODO: Conceptually, i think all callbacks should be part of the run.
+What is now referred to as job adds so much complexitry.

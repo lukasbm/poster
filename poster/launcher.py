@@ -1,20 +1,35 @@
-from typing import Any, List, Dict
+from typing import Any, List, Dict, Callable
+
+from submitit.helpers import Checkpointable
 
 from .callbacks import Callback
 
 
-class Job:
+def handle_signal(sig, frame):
+    print(f"Signal {sig} received!")
+    # TODO: make sure to run the callbacks?
+
+
+def task_fn_to_class(task_fn: Callable) -> Checkpointable:
+    t = type("Task", (Checkpointable,), {"__call__": task_fn})
+    o = t()
+
+
+class Job(Checkpointable):
     context: Dict[str, Any] = {}
 
-    def __init__(self):
-        pass
+    def __init__(self, commands: List[str]):
+        self.commands = commands
+        self.is_multirun = len(commands) > 1
 
 
 class Run:
     command: str
     context: Dict[str, Any] = {}
+    callbacks: List[Callback]
 
-    def __init__(self, command: str):
+    # each run can have different callbacks! should be part of this, not launcher
+    def __init__(self, callbacks: List[Callback], command: str):
         self.command = command
 
     def set_args(self):
@@ -24,8 +39,13 @@ class Run:
 
 
 class Launcher:
-    def __init__(self, callbacks: List[Callback], execute_final_callbacks_in_reverse: bool = False,
-                 _called_from_cli: bool = False, _commands: List[str] = None):
+    def __init__(
+            self,
+            callbacks: List[Callback],
+            execute_final_callbacks_in_reverse: bool = False,
+            _called_from_cli: bool = False,
+            _commands: List[str] = None
+    ):
         """
         :param callbacks: The order of callbacks matters
         :param execute_final_callbacks_in_reverse:
@@ -35,10 +55,10 @@ class Launcher:
         self.exec_in_reverse = execute_final_callbacks_in_reverse
         self._called_from_cli = _called_from_cli
 
-        self.job = Job()
         self.runs = [
             Run(cmd) for cmd in _commands
         ]
+        self.job = Job(_commands)
 
     def start(self):
         if not self._called_from_cli:
@@ -73,3 +93,17 @@ class Launcher:
 
         for callback in reversed(self.callbacks) if self.exec_in_reverse else self.callbacks:
             self.job = callback.after_job_end(job=self.job)
+
+
+def instrument_run(
+        task: Callable,
+        make_checkpointable: bool = False,
+        execute_final_callbacks_in_reverse: bool = False,
+        *args: Any,
+        **kwargs: Any
+) -> Launcher:
+    # this is the function the user calls!
+    if make_checkpointable:
+        task = task_fn_to_class(task)
+
+    launcher = Launcher()

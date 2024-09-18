@@ -4,6 +4,7 @@ from typing import Callable
 from hydra_zen import ZenStore
 
 from .callback import Callback
+from ..launcher import Run, Job
 
 log = logging.getLogger(__name__)
 
@@ -19,7 +20,14 @@ class HydraZenCallback(Callback):
         self.job_type = job_type
         self.hydra_version_base = hydra_version_base
 
-    def before_run_start(self):
+    def before_job_start(self, job: Job) -> Job:
+        log.info("HydraZenCallback: before_job_start")
+        if job.is_multirun:
+            raise ValueError("HydraZenCallback does not support multirun jobs yet")
+        return job
+
+
+    def before_run_start(self, run: Run) -> Run:
         log.info("HydraZenCallback: before_run_start")
 
         from hydra_zen import zen
@@ -34,3 +42,5 @@ class HydraZenCallback(Callback):
         self.store.add_to_hydra_store(overwrite_ok=True)
         # exposes the cli
         zen(self.task_fn).hydra_main(config_name=self.job_type, version_base=self.hydra_version_base)
+
+        return run

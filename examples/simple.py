@@ -3,6 +3,7 @@ from typing import List
 from hydra_zen import store, just
 
 from poster import Launcher, HydraZenCallback
+from poster.launcher import Run
 
 
 @store(
@@ -24,8 +25,7 @@ if __name__ == "__main__":
     name_store(just(["Alice", "Bob", "Charlie"]), name="basic")
     name_store(just(["Dave", "Eve", "Frank"]), name="advanced")
 
-    launcher = Launcher(callbacks=[
+    launcher = Run(callbacks=[
         HydraZenCallback(task_fn=main_fn, store=store, job_type="simple"),
     ])
-    launcher.start()
     # TODO: where is this called launcher.end()
